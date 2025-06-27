@@ -106,5 +106,94 @@ public class CourseController {
         Course approvedCourse = repo.save(course);
         return ResponseEntity.ok(approvedCourse);
     }
+        // عرض جميع الدورات
+    @GetMapping
+    public ResponseEntity<List<Course>> getAllCourses() {
+        List<Course> courses = repo.findAll();
+        return ResponseEntity.ok(courses);
+    }
+
+     // API للاشتراك في دورة
+    @PostMapping("/subscribe")
+    public ResponseEntity<?> subscribeToCourse(
+        @RequestBody CourseSubscriptionRequest subscriptionRequest, 
+        @RequestHeader("X-User-Id") Long learnerId
+    ) {
+        // تحقق من وجود الدورة
+        Course course = courseRepository.findById(subscriptionRequest.getCourseId()).orElse(null);
+        if (course == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Course not found");
+        }
+
+        // التحقق من الدفع
+        boolean paymentStatus = checkPaymentStatus(learnerId, course.getPrice());
+        if (!paymentStatus) {
+            return ResponseEntity.status(HttpStatus.PAYMENT_REQUIRED).body("Payment required");
+        }
+
+        // عملية الدفع إذا كانت الحالة صحيحة
+        processPayment(learnerId, course.getPrice(), course);
+
+        // إضافة المتعلم إلى الدورة
+        // مثلا: إضافة الدورة إلى قائمة الدورات المسجلة للمتعلم
+        return ResponseEntity.status(HttpStatus.CREATED).body("Successfully subscribed to course");
+    }
+
+    // تحقق من حالة الدفع عبر RestTemplate إلى خدمة الدفع
+    private boolean checkPaymentStatus(Long learnerId, Double coursePrice) {
+        // هنا يمكننا استدعاء API في خدمة الدفع للتحقق من حالة الدفع
+        ResponseEntity<Boolean> paymentResponse = restTemplate.exchange(
+            "http://payment-service/payment/check/" + learnerId + "/" + coursePrice,
+            HttpMethod.GET,
+            null,
+            Boolean.class
+        );
+        return paymentResponse.getBody();
+    }
+
+    // معالجة الدفع
+    private void processPayment(Long learnerId, Double coursePrice, Course course) {
+        restTemplate.exchange(
+            "http://payment-service/payment/process/" + learnerId + "/" + coursePrice + "/" + course.getId(),
+            HttpMethod.POST,
+            null,
+            Void.class
+        );
+    }
+
+   // In CourseService (or any downstream service)
+   @GetMapping("/courses")
+   public ResponseEntity<?> getSubscribedCoursesAndTestResults(
+        @RequestHeader("X-User-Id") Long userId,  
+        @RequestHeader("X-User-Role") String role) {
+
+    if (!"LEARNER".equalsIgnoreCase(role)) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Only learners can access their courses and results");
+    }
+
+    // Fetch the courses the user is subscribed to
+    List<Course> courses = courseRepository.findBySubscribedUsersId(userId); // Use userId to fetch courses
+
+    if (courses.isEmpty()) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No courses found for this user");
+    }
+
+    List<Map<String, Object>> coursesWithResults = new ArrayList<>();
+
+    // Fetch the test results for each course
+    for (Course course : courses) {
+        Map<String, Object> courseWithResults = new HashMap<>();
+        courseWithResults.put("course", course);
+        
+        // Fetch the test results for the user in this course
+        List<TestResult> results = testResultRepository.findByUserIdAndTestCourseId(userId, course.getId());
+        courseWithResults.put("results", results);
+        
+        coursesWithResults.add(courseWithResults);
+    }
+
+    return ResponseEntity.ok(coursesWithResults);
+}
+
 
 }

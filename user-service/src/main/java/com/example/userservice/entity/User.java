@@ -14,6 +14,12 @@ public class User {
 
     private String password;
 
+    private Double walletBalance;
+    
+    @ManyToMany(mappedBy = "subscribedUsers")  // الربط مع الكائن الآخر (دورة)
+    private List<Course> subscribedCourses;  // قائمة الدورات التي اشترك فيها المستخدم
+
+
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
@@ -33,4 +39,7 @@ public class User {
 
     public Role getRole() { return role; }
     public void setRole(Role role) { this.role = role; }
+
+    public Double getWalletBalance() { return walletBalance; }
+    public void setWalletBalance(Double walletBalance) { this.walletBalance = walletBalance; }
 }
