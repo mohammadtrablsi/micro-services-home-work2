@@ -1,0 +1,4 @@
+com\example\courseservice\controller\ItemController.class
+com\example\courseservice\CourseServiceApplication.class
+com\example\courseservice\repository\ItemRepository.class
+com\example\courseservice\entity\Item.class
