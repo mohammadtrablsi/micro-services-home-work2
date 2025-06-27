@@ -26,6 +26,7 @@
 public class AuthController {
 
     @Autowired private AuthService authService;
+    @Autowired private UserRepository userRepository;
 
     @PostMapping("/register/learner")
     public AuthResponse registerLearner(@RequestBody RegisterRequest req) {
@@ -46,4 +47,20 @@ public class AuthController {
     public AuthResponse login(@RequestBody LoginRequest req) {
         return new AuthResponse(authService.login(req));
     }
+    @GetMapping("/users/name/{username}")
+    public ResponseEntity<UserDTO> getUserByUsername(@PathVariable String username) {
+    User user = userRepository.findByUsername(username);
+    if (user == null) {
+        return ResponseEntity.notFound().build();
+    }
+
+    UserDTO dto = new UserDTO(
+        user.getId(),
+        user.getUsername(),
+        user.getEmail(),
+        user.getRole().getName()
+    );
+    return ResponseEntity.ok(dto);
+}
+
 }
