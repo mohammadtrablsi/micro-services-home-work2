@@ -10,6 +10,7 @@ public class Course {
     private String title;
     private String description;
     private Long trainerId;
+    private boolean approved;
 
     // Getters and Setters
     public Long getId() { return id; }
@@ -20,4 +21,6 @@ public class Course {
     public void setDescription(String description) { this.description = description; }
     public Long getTrainerId() { return trainerId; }
     public void setTrainerId(Long trainerId) { this.trainerId = trainerId; }
+    public boolean isApproved() { return approved; }
+    public void setApproved(boolean approved) { this.approved = approved; }
 }

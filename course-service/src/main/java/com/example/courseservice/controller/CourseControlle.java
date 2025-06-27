@@ -68,8 +68,43 @@ public class CourseController {
         if (!"TRAINER".equalsIgnoreCase(role)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Only trainers can create courses");
         }
-
+        course.setApproved(false); 
         course.setTrainerId(trainerId);
         return ResponseEntity.ok(repo.save(course));
     }
+
+    @GetMapping("/pending")
+    public ResponseEntity<?> getPendingCourses(
+            @RequestHeader("X-User-Role") String role
+    ) {
+        // التحقق من أن الدور هو "ADMIN"
+        if (!"ADMIN".equalsIgnoreCase(role)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Only admins can access pending courses");
+        }
+
+        // جلب الدورات التي لم تتم الموافقة عليها
+        List<Course> pendingCourses = repo.findByApprovedFalse();
+        return ResponseEntity.ok(pendingCourses);
+    }
+
+        // API للموافقة على الدورة من قبل الـ admin
+    @PutMapping("/approve/{courseId}")
+    public ResponseEntity<Course> approveCourse(
+            @PathVariable Long courseId,
+            @RequestHeader("X-User-Role") String role
+    ) {
+        if (!"ADMIN".equalsIgnoreCase(role)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);  // فقط المسؤول يمكنه الموافقة
+        }
+
+        Course course = repo.findById(courseId).orElse(null);
+        if (course == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);  // الدورة غير موجودة
+        }
+
+        course.setApproved(true);  // تعيين الدورة كموافقة
+        Course approvedCourse = repo.save(course);
+        return ResponseEntity.ok(approvedCourse);
+    }
+
 }
