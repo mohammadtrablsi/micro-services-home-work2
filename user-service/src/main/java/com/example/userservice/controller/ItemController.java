@@ -1,23 +1,49 @@
-package com.example.userservice.controller;
+// package com.example.userservice.controller;
 
-import com.example.userservice.entity.Item;
-import com.example.userservice.repository.ItemRepository;
-import org.springframework.web.bind.annotation.*;
+// import com.example.userservice.entity.Item;
+// import com.example.userservice.repository.ItemRepository;
+// import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+// import java.util.List;
 
+// @RestController
+// @RequestMapping("/users")
+// public class ItemController {
+//     private final ItemRepository repo;
+//     public ItemController(ItemRepository repo) { this.repo = repo; }
+
+//     @PostMapping
+//     public Item create(@RequestBody Item item) { return repo.save(item); }
+
+//     @GetMapping
+//     public List<Item> getAll() { return repo.findAll(); }
+
+//     @GetMapping("/<built-in function id>")
+//     public Item getOne(@PathVariable Long id) { return repo.findById(id).orElseThrow(); }
+// }
 @RestController
-@RequestMapping("/users")
-public class ItemController {
-    private final ItemRepository repo;
-    public ItemController(ItemRepository repo) { this.repo = repo; }
+@RequestMapping("/auth")
+public class AuthController {
 
-    @PostMapping
-    public Item create(@RequestBody Item item) { return repo.save(item); }
+    @Autowired private AuthService authService;
 
-    @GetMapping
-    public List<Item> getAll() { return repo.findAll(); }
+    @PostMapping("/register/learner")
+    public AuthResponse registerLearner(@RequestBody RegisterRequest req) {
+        return new AuthResponse(authService.registerLearner(req));
+    }
 
-    @GetMapping("/<built-in function id>")
-    public Item getOne(@PathVariable Long id) { return repo.findById(id).orElseThrow(); }
+    @PostMapping("/register/trainer")
+    public AuthResponse registerTrainer(@RequestBody RegisterRequest req) {
+        return new AuthResponse(authService.addTrainer(req));
+    }
+
+    @PostMapping("/register/admin")
+    public AuthResponse registerAdmin(@RequestBody RegisterRequest req) {
+        return new AuthResponse(authService.addAdmin(req));
+    }
+
+    @PostMapping("/login")
+    public AuthResponse login(@RequestBody LoginRequest req) {
+        return new AuthResponse(authService.login(req));
+    }
 }
