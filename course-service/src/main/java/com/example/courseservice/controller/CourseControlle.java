@@ -35,7 +35,11 @@ public class CourseController {
         return ResponseEntity.ok(courses);
     }
 
+    
     @GetMapping("/trainer/by-name")
+    @CircuitBreaker(name = "userServiceCircuitBreaker", fallbackMethod = "getTrainerFallback")
+    @Retry(name = "userServiceRetry")
+    @TimeLimiter(name = "userServiceTimeout", fallbackMethod = "getTrainerFallback")
     public ResponseEntity<?> getCoursesByTrainerName(
             @RequestParam String name,
             @RequestHeader("X-User-Role") String role
