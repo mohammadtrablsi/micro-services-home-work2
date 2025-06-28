@@ -38,7 +38,9 @@ public class TestController {
         testRepository.save(test);  // Save the test if the trainer role is valid
         return ResponseEntity.status(HttpStatus.CREATED).body(test);
     }
-
+    @CircuitBreaker(name = "courseServiceCB", fallbackMethod = "courseServiceFallback")
+    @Retry(name = "courseServiceRetry")
+    @TimeLimiter(name = "courseServiceTimeout", fallbackMethod = "courseServiceFallback")
     @PostMapping("/addResult")
     public ResponseEntity<TestResult> addTestResult(@RequestBody TestResult result, @RequestHeader("X-User-Role") String role) {
         if (!"LEARNER".equalsIgnoreCase(role)) {
@@ -73,4 +75,21 @@ public class TestController {
         List<TestResult> results = testResultRepository.findByUserId(userId);
         return ResponseEntity.ok(results);
     }
+    @GetMapping("/results/user/{userId}/course/{courseId}")
+    public ResponseEntity<List<TestResult>> getResultsByUserAndCourse(
+            @PathVariable Long userId,
+            @PathVariable Long courseId
+    ) {
+        List<TestResult> results = testResultRepository.findByUserIdAndTestCourseId(userId, courseId);
+        return ResponseEntity.ok(results);
+    }
+    public ResponseEntity<?> courseServiceFallback(
+        TestResult result,
+        String role,
+        Throwable throwable
+) {
+    return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+            .body("Course service is currently unavailable. Please try again later.");
+}
+
 }

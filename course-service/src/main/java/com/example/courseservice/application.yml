@@ -9,6 +9,19 @@ resilience4j:
         permittedNumberOfCallsInHalfOpenState: 5
         minimumNumberOfCalls: 5
         eventConsumerBufferSize: 10
+      paymentServiceCB:
+        slidingWindowSize: 10
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
+        permittedNumberOfCallsInHalfOpenState: 3
+        minimumNumberOfCalls: 5
+
+      assessmentServiceCB:
+        slidingWindowSize: 10
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
+        permittedNumberOfCallsInHalfOpenState: 3
+        minimumNumberOfCalls: 5
 
   retry:
     instances:
@@ -18,8 +31,18 @@ resilience4j:
         retryExceptions:
           - java.io.IOException
           - java.net.ConnectException
+      paymentServiceRetry:
+        maxAttempts: 3
+        waitDuration: 1s
+      assessmentServiceRetry:
+        maxAttempts: 3
+        waitDuration: 1s
 
   timelimiter:
     instances:
       userServiceTimeout:
         timeoutDuration: 5s
+      paymentServiceTimeout:
+        timeoutDuration: 4s
+      assessmentServiceTimeout:
+        timeoutDuration: 4s

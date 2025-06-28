@@ -1,0 +1,21 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/users/**
+          filters:
+            - CircuitBreaker=name=userServiceCB,fallbackUri=/fallback/user
+            - Retry=name=userServiceRetry,maxAttempts=3,waitDuration=1000ms
+            - RequestTimeout=timeout=5000ms
+        - id: course-service
+          uri: lb://course-service
+          predicates:
+            - Path=/courses/**
+          filters:
+            - CircuitBreaker=name=courseServiceCB,fallbackUri=/fallback/course
+            - Retry=name=courseServiceRetry,maxAttempts=3,waitDuration=1000ms
+            - RequestTimeout=timeout=5000ms
+        # Add similar configurations for payment-service and assessment-service
