@@ -1,4 +1,4 @@
-package com.example.course_service.entity;
+package com.example.courseservice.entity;
 
 import jakarta.persistence.*;
 import java.util.ArrayList;

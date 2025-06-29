@@ -1,4 +1,4 @@
-package com.example.course_service.configuration;
+package com.example.courseservice.configuration;
 
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.loadbalancer.annotation.LoadBalancerClient;

@@ -1,4 +1,4 @@
-package com.example.course_service.dto;
+package com.example.courseservice.dto;
 
 public class UserDTO {
     private Long id;

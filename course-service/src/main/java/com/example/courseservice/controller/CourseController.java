@@ -1,7 +1,7 @@
-package com.example.course_service.controller;
+package com.example.courseservice.controller;
 
-import com.example.course_service.entity.Course;
-import com.example.course_service.repository.CourseRepository;
+import com.example.courseservice.entity.Course;
+import com.example.courseservice.repository.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
