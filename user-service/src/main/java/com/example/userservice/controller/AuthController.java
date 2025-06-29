@@ -1,8 +1,9 @@
-// package com.example.userservice.controller;
+package com.example.user_service.controller;
 
-// import com.example.userservice.entity.Item;
-// import com.example.userservice.repository.ItemRepository;
-// import org.springframework.web.bind.annotation.*;
+import com.example.user_service.repository.UserRepository;
+import com.example.user_service.service.AuthService;
+import com.example.user_service.dto.UserDTO;
+import org.springframework.web.bind.annotation.*;
 
 // import java.util.List;
 

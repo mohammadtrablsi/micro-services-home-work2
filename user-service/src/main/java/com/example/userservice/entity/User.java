@@ -1,7 +1,8 @@
-package com.example.userservice.entity;
+package com.example.user_service.entity;
 
 import jakarta.persistence.*;
-
+import java.util.List;
+import com.example.courseservice.entity.Course;
 @Entity
 public class User {
     @Id

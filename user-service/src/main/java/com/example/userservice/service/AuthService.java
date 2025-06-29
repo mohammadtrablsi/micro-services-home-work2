@@ -1,3 +1,7 @@
+import com.example.user_service.repository.UserRepository;
+import com.example.user_service.repository.RoleRepository;
+import com.example.user_service.security.JwtUtil;
+import com.example.user_service.security.SecurityConfig;
 @Service
 public class AuthService {
     @Autowired private UserRepository userRepo;

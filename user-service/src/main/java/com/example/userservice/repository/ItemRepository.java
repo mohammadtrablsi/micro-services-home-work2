@@ -1,6 +1,6 @@
-package com.example.userservice.repository;
+// package com.example.userservice.repository;
 
-import com.example.userservice.entity.Item;
-import org.springframework.data.jpa.repository.JpaRepository;
+// import com.example.userservice.entity.Item;
+// import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ItemRepository extends JpaRepository<Item, Long> { }
+// public interface ItemRepository extends JpaRepository<Item, Long> { }

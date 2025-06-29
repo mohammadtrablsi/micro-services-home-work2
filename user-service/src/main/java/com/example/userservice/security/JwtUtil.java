@@ -1,3 +1,12 @@
+package com.example.user_service.security;
+
+import org.springframework.stereotype.Component;
+import com.example.user_service.entity.User;  // Import User class
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
+
+import java.util.Date;
 // @Component
 // public class JwtUtil {
 //     private final String SECRET = "mySecretKey";
