@@ -1,4 +1,4 @@
-package com.example.courseservice.configuration;
+package com.example.courseservice.Configuration;
 
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.DefaultResponse;

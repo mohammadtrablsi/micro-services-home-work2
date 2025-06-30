@@ -1,7 +1,7 @@
 // TestRepository.java
-package com.example.assessment_service.repository;
+package com.example.assessmentservice.repository;
 
-import com.example.assessment_service.entity.Test;
+import com.example.assessmentservice.entity.Test;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

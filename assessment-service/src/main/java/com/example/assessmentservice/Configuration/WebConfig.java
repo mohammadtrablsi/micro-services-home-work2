@@ -1,4 +1,4 @@
-package com.example.assessment_service.configuration;
+package com.example.assessmentservice.Configuration;
 
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.loadbalancer.annotation.LoadBalancerClient;

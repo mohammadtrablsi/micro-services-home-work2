@@ -1,10 +1,14 @@
-package com.example.assessment_service.controller;
+package com.example.assessmentservice.controller;
 
-import com.example.assessment_service.entity.Test;
-import com.example.assessment_service.entity.TestResult;
-import com.example.assessment_service.repository.TestRepository;
-import com.example.assessment_service.repository.TestResultRepository;
-import com.example.assessment_service.dto.UserDTO; // Assuming DTO for User
+import com.example.assessmentservice.entity.Test;
+import com.example.assessmentservice.entity.TestResult;
+import com.example.assessmentservice.repository.TestRepository;
+import com.example.assessmentservice.repository.TestResultRepository;
+
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
+import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;

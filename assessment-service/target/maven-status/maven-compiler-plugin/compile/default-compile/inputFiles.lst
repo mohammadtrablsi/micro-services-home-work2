@@ -1,4 +1,8 @@
-C:\Users\felux\Downloads\MicroservicesExample_FullDB\assessment-service\src\main\java\com\example\assessmentservice\controller\ItemController.java
+C:\Users\felux\Downloads\MicroservicesExample_FullDB\assessment-service\src\main\java\com\example\assessmentservice\entity\TestResult.java
+C:\Users\felux\Downloads\MicroservicesExample_FullDB\assessment-service\src\main\java\com\example\assessmentservice\repository\TestRepository.java
 C:\Users\felux\Downloads\MicroservicesExample_FullDB\assessment-service\src\main\java\com\example\assessmentservice\AssessmentServiceApplication.java
-C:\Users\felux\Downloads\MicroservicesExample_FullDB\assessment-service\src\main\java\com\example\assessmentservice\repository\ItemRepository.java
-C:\Users\felux\Downloads\MicroservicesExample_FullDB\assessment-service\src\main\java\com\example\assessmentservice\entity\Item.java
+C:\Users\felux\Downloads\MicroservicesExample_FullDB\assessment-service\src\main\java\com\example\assessmentservice\repository\TestResultRepository.java
+C:\Users\felux\Downloads\MicroservicesExample_FullDB\assessment-service\src\main\java\com\example\assessmentservice\entity\Test.java
+C:\Users\felux\Downloads\MicroservicesExample_FullDB\assessment-service\src\main\java\com\example\assessmentservice\Configuration\WebConfig.java
+C:\Users\felux\Downloads\MicroservicesExample_FullDB\assessment-service\src\main\java\com\example\assessmentservice\Configuration\CustomLoadBalancer.java
+C:\Users\felux\Downloads\MicroservicesExample_FullDB\assessment-service\src\main\java\com\example\assessmentservice\controller\TestController.java

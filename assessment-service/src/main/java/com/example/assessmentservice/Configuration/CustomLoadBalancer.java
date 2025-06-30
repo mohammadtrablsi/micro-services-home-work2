@@ -1,4 +1,4 @@
-package com.example.assessment_service.configuration;
+package com.example.assessmentservice.Configuration;
 
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.DefaultResponse;

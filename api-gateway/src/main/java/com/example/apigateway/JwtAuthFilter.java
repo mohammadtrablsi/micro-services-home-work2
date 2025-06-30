@@ -1,3 +1,5 @@
+package com.example.apigateway;
+
 // @Component
 // public class JwtAuthFilter implements GlobalFilter {
 
@@ -37,6 +39,30 @@
 //         }
 //     }
 // }
+import org.springframework.stereotype.Component;
+import org.springframework.cloud.gateway.filter.GlobalFilter;
+import org.springframework.cloud.gateway.filter.GatewayFilterChain;
+import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Mono;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ServerWebExchange;
+import org.springframework.cloud.gateway.filter.GatewayFilterChain;
+import org.springframework.cloud.gateway.filter.GlobalFilter;
+import org.springframework.stereotype.Component;
+import reactor.core.publisher.Mono;
+import org.springframework.http.HttpRequest;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
+import org.springframework.http.server.reactive.ServerHttpRequest;
+
+
 @Component
 public class JwtAuthFilter implements GlobalFilter {
 

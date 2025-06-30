@@ -5,41 +5,46 @@ spring:
   application:
     name: gateway-service
 
+spring:
   cloud:
     gateway:
-      default-filters:
-        - name: CircuitBreaker
-          args:
-            name: default
-            fallbackUri: forward:/fallback
       routes:
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/users/**
+          filters:
+            - CircuitBreaker=name=userServiceCB,fallbackUri=/fallback/user
+            - Retry=name=userServiceRetry,maxAttempts=3,waitDuration=1000ms
+            - RequestTimeout=timeout=5000ms
+
         - id: course-service
-          uri: lb://COURSE-SERVICE
+          uri: lb://course-service
           predicates:
             - Path=/courses/**
           filters:
-            - JwtAuthFilter
-
-        - id: user-service
-          uri: lb://USER-SERVICE
-          predicates:
-            - Path=/users/**, /auth/**
-          filters:
-            - JwtAuthFilter
+            - CircuitBreaker=name=courseServiceCB,fallbackUri=/fallback/course
+            - Retry=name=courseServiceRetry,maxAttempts=3,waitDuration=1000ms
+            - RequestTimeout=timeout=5000ms
 
         - id: payment-service
-          uri: lb://PAYMENT-SERVICE
+          uri: lb://payment-service
           predicates:
             - Path=/payments/**
           filters:
-            - JwtAuthFilter
+            - CircuitBreaker=name=paymentServiceCB,fallbackUri=/fallback/payment
+            - Retry=name=paymentServiceRetry,maxAttempts=3,waitDuration=1000ms
+            - RequestTimeout=timeout=5000ms
 
         - id: assessment-service
-          uri: lb://ASSESSMENT-SERVICE
+          uri: lb://assessment-service
           predicates:
             - Path=/assessments/**
           filters:
-            - JwtAuthFilter
+            - CircuitBreaker=name=assessmentServiceCB,fallbackUri=/fallback/assessment
+            - Retry=name=assessmentServiceRetry,maxAttempts=3,waitDuration=1000ms
+            - RequestTimeout=timeout=5000ms
+
 
   main:
     web-application-type: reactive

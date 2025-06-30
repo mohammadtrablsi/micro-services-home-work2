@@ -1,1 +1,3 @@
+FallbackController.class
+JwtAuthFilter.class
 com\example\apigateway\ApiGatewayApplication.class

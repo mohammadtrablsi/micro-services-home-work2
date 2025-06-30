@@ -1,4 +1,4 @@
-package com.example.payement_service.configuration;
+package com.example.paymentservice.Configuration;
 
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.loadbalancer.annotation.LoadBalancerClient;
