@@ -1,4 +1,4 @@
-package com.example.user_service.entity;
+package com.example.userservice.entity;
 
 import jakarta.persistence.*;
 import java.util.List;
@@ -7,9 +7,9 @@ import java.util.List;
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    public Long id;
 
-    private String name; // e.g., "ADMIN", "TRAINER", "LEARNER"
+    public String name; // e.g., "ADMIN", "TRAINER", "LEARNER"
 
     @OneToMany(mappedBy = "role")
     private List<User> users;

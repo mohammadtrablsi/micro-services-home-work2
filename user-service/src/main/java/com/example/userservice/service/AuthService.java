@@ -1,7 +1,18 @@
-import com.example.user_service.repository.UserRepository;
-import com.example.user_service.repository.RoleRepository;
-import com.example.user_service.security.JwtUtil;
-import com.example.user_service.security.SecurityConfig;
+package com.example.userservice.service;
+
+import com.example.userservice.repository.UserRepository;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import com.example.userservice.dto.LoginRequest;
+import com.example.userservice.dto.RegisterRequest;
+import com.example.userservice.entity.Role;
+import com.example.userservice.entity.User;
+import com.example.userservice.repository.RoleRepository;
+import com.example.userservice.security.JwtUtil;
+import com.example.userservice.security.SecurityConfig;
 @Service
 public class AuthService {
     @Autowired private UserRepository userRepo;

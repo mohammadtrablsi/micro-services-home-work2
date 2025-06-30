@@ -1,14 +1,15 @@
-package com.example.user_service.entity;
+package com.example.userservice.entity;
 
 import jakarta.persistence.*;
 import java.util.List;
-import com.example.courseservice.entity.Course;
 @Entity
+@Table(name = "\"user\"")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     private String username;
 
     private String email;
@@ -17,8 +18,8 @@ public class User {
 
     private Double walletBalance;
     
-    @ManyToMany(mappedBy = "subscribedUsers")  // الربط مع الكائن الآخر (دورة)
-    private List<Course> subscribedCourses;  // قائمة الدورات التي اشترك فيها المستخدم
+    // @ManyToMany(mappedBy = "subscribedUsers")  // الربط مع الكائن الآخر (دورة)
+    // private List<CourseDTO> subscribedCourses;  // قائمة الدورات التي اشترك فيها المستخدم
 
 
     @ManyToOne

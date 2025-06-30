@@ -1,7 +1,7 @@
-package com.example.user_service.security;
+package com.example.userservice.security;
 
 import org.springframework.stereotype.Component;
-import com.example.user_service.entity.User;  // Import User class
+import com.example.userservice.entity.User;  // Import User class
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;

@@ -1,8 +1,15 @@
-package com.example.user_service.controller;
+package com.example.userservice.controller;
 
-import com.example.user_service.repository.UserRepository;
-import com.example.user_service.service.AuthService;
-import com.example.user_service.dto.UserDTO;
+import com.example.userservice.repository.UserRepository;
+import com.example.userservice.service.AuthService;
+import com.example.userservice.dto.AuthResponse;
+import com.example.userservice.dto.LoginRequest;
+import com.example.userservice.dto.RegisterRequest;
+import com.example.userservice.dto.UserDTO;
+import com.example.userservice.entity.User;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 // import java.util.List;
@@ -33,7 +40,6 @@ public class AuthController {
     public AuthResponse registerLearner(@RequestBody RegisterRequest req) {
         return new AuthResponse(authService.registerLearner(req));
     }
-
     @PostMapping("/register/trainer")
     public AuthResponse registerTrainer(@RequestBody RegisterRequest req) {
         return new AuthResponse(authService.addTrainer(req));

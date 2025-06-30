@@ -1,9 +1,9 @@
-package com.example.user_service.seeder;
+package com.example.userservice.seeder;
 
-import com.example.user_service.entity.Role;
-import com.example.user_service.entity.User;
-import com.example.user_service.repository.RoleRepository;
-import com.example.user_service.repository.UserRepository;
+import com.example.userservice.entity.Role;
+import com.example.userservice.entity.User;
+import com.example.userservice.repository.RoleRepository;
+import com.example.userservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
