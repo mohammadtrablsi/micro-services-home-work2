@@ -1,5 +1,6 @@
 package com.example.paymentservice.entity;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import jakarta.persistence.Entity;
@@ -26,6 +27,15 @@ public class PaymentTransaction {
         this.courseId = courseId;
         this.amount = amount;
         this.transactionDate = new Date();
+    }
+    public PaymentTransaction() {
+    }
+
+    public PaymentTransaction(Long learnerId, Long courseId, Double amount) {
+        this.learnerId = learnerId;
+        this.courseId = courseId;
+        this.amount = amount;
+        // this.timestamp = LocalDateTime.now();
     }
 
     // Getters and setters

@@ -4,7 +4,6 @@ C:\Users\felux\Downloads\MicroservicesExample_FullDB\user-service\src\main\java\
 C:\Users\felux\Downloads\MicroservicesExample_FullDB\user-service\src\main\java\com\example\userservice\dto\RegisterRequest.java
 C:\Users\felux\Downloads\MicroservicesExample_FullDB\user-service\src\main\java\com\example\userservice\dto\UserDTO.java
 C:\Users\felux\Downloads\MicroservicesExample_FullDB\user-service\src\main\java\com\example\userservice\security\JwtUtil.java
-C:\Users\felux\Downloads\MicroservicesExample_FullDB\user-service\src\main\java\com\example\userservice\repository\ItemRepository.java
 C:\Users\felux\Downloads\MicroservicesExample_FullDB\user-service\src\main\java\com\example\userservice\UserServiceApplication.java
 C:\Users\felux\Downloads\MicroservicesExample_FullDB\user-service\src\main\java\com\example\userservice\dto\LoginRequest.java
 C:\Users\felux\Downloads\MicroservicesExample_FullDB\user-service\src\main\java\com\example\userservice\security\SecurityConfig.java

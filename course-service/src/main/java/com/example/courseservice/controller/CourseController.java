@@ -1,13 +1,24 @@
 package com.example.courseservice.controller;
 
+import com.example.courseservice.dto.CourseSubscriptionRequest;
+import com.example.courseservice.dto.UserDTO;
 import com.example.courseservice.entity.Course;
 import com.example.courseservice.repository.CourseRepository;
+
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
+import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequestMapping("/courses")
@@ -117,7 +128,6 @@ public class CourseController {
         return ResponseEntity.ok(courses);
     }
 
-     // API للاشتراك في دورة
 @PostMapping("/subscribe")
 public ResponseEntity<?> subscribeToCourse(
     @RequestBody CourseSubscriptionRequest subscriptionRequest, 
@@ -130,20 +140,26 @@ public ResponseEntity<?> subscribeToCourse(
     }
 
     try {
-        // 2. التحقق من الدفع باستخدام CompletableFuture + Resilience4j
+        // 2. التحقق من الدفع
         boolean paymentStatus = checkPaymentStatus(learnerId, course.getPrice()).join();
         if (!paymentStatus) {
             return ResponseEntity.status(HttpStatus.PAYMENT_REQUIRED).body("Payment required");
         }
 
-        // 3. تنفيذ عملية الدفع
+        // 3. تنفيذ الدفع
         processPayment(learnerId, course.getPrice(), course).join();
 
-        // 4. من المفترض هنا إضافة المتعلم إلى الدورة (مثلاً في جدول أو علاقة اشتراك)
+        // ✅ 4. أضف المتعلم إلى قائمة المشتركين
+        if (!course.getSubscribedUserIds().contains(learnerId)) {
+            course.getSubscribedUserIds().add(learnerId);
+            repo.save(course); // احفظ التحديث
+        }
+
         return ResponseEntity.status(HttpStatus.CREATED).body("Successfully subscribed to course");
 
     } catch (Exception e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Subscription failed due to internal error");
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Subscription failed due to internal error");
     }
 }
 
@@ -231,7 +247,7 @@ public ResponseEntity<?> getSubscribedCoursesAndTestResults(
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Only learners can access this endpoint");
     }
 
-    List<Course> courses = repo.findBySubscribedUsersId(userId);
+    List<Course> courses = repo.findBySubscribedUserIdsContaining(userId); // if using Long list
     if (courses.isEmpty()) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No subscribed courses found");
     }
@@ -239,7 +255,7 @@ public ResponseEntity<?> getSubscribedCoursesAndTestResults(
     List<Map<String, Object>> coursesWithResults = new ArrayList<>();
 
     for (Course course : courses) {
-        Map<String, Object> entry = new HashMap<>();
+        Map<String, Object> entry = new HashMap<String, Object>();
         entry.put("course", course);
 
         try {
@@ -269,7 +285,7 @@ public List<?> getResultsFromAssessment(Long userId, Long courseId) {
 }
 
 public List<?> assessmentServiceFallback(Long userId, Long courseId, Throwable t) {
-    log.error("Failed to fetch results from assessment service", t);
+    // log.error("Failed to fetch results from assessment service", t);
     return List.of("Assessment service is currently unavailable");
 }
 

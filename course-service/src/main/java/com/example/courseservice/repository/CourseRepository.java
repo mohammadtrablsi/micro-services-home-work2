@@ -11,4 +11,9 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
     
     // جلب الدورات بناءً على Trainer ID
     List<Course> findByTrainerId(Long trainerId);
+
+        // ✅ Add this:
+     // ✅ هذه هي الدالة المطلوبة
+    List<Course> findBySubscribedUserIdsContaining(Long userId); // Only works if you used @ElementCollection
+
 }

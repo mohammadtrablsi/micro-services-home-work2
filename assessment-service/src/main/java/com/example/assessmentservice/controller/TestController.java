@@ -53,7 +53,7 @@ public class TestController {
 
         // Check if the course exists (via CourseService)
         ResponseEntity<Boolean> courseExistsResponse = restTemplate.exchange(
-                "http://COURSE-SERVICE/courses/" + result.getTest().getCourse().getId(), 
+                "http://COURSE-SERVICE/courses/" + result.getTest().getCourseId(), 
                 HttpMethod.GET, 
                 null, 
                 Boolean.class

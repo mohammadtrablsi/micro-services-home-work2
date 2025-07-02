@@ -6,6 +6,7 @@ import java.util.List;
 
 @Entity
 public class Course {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -14,18 +15,22 @@ public class Course {
     private String description;
     private Long trainerId;
     private boolean approved;
+    private Double price;
 
-    @ManyToMany
-    @JoinTable(
-        name = "user_course_subscription", // The intermediate table
-        joinColumns = @JoinColumn(name = "course_id"),  // The foreign key to Course
-        inverseJoinColumns = @JoinColumn(name = "user_id")  // The foreign key to User
+    @ElementCollection
+    @CollectionTable(
+        name = "course_subscriptions",
+        joinColumns = @JoinColumn(name = "course_id")
     )
-    private List<User> subscribedUsers = new ArrayList<>();  // List of users who subscribed to this course
+    @Column(name = "user_id") // اسم العمود الذي يخزن الـ Long
+    private List<Long> subscribedUserIds = new ArrayList<>();
 
     // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
+
+    public Double getPrice() { return price; }
+    public void setPrice(Double price) { this.price = price; }
 
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
@@ -39,6 +44,6 @@ public class Course {
     public boolean isApproved() { return approved; }
     public void setApproved(boolean approved) { this.approved = approved; }
 
-    public List<User> getSubscribedUsers() { return subscribedUsers; }
-    public void setSubscribedUsers(List<User> subscribedUsers) { this.subscribedUsers = subscribedUsers; }
+    public List<Long> getSubscribedUserIds() { return subscribedUserIds; }
+    public void setSubscribedUserIds(List<Long> subscribedUserIds) { this.subscribedUserIds = subscribedUserIds; }
 }

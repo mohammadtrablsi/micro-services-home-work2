@@ -15,24 +15,37 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.2.0</version>
+        <relativePath/> <!-- important to avoid mismatches -->
     </parent>
 
     <properties>
         <java.version>17</java.version>
-        <spring-cloud.version>2023.0.0</spring-cloud.version>
+        <spring-cloud.version>2023.0.1</spring-cloud.version> <!-- Updated -->
     </properties>
 
     <dependencies>
-        <!-- Resilience4j Circuit Breaker -->
+        <!-- ✅ Resilience4j compatible with Boot 3.x -->
         <dependency>
             <groupId>io.github.resilience4j</groupId>
-            <artifactId>resilience4j-spring-boot2</artifactId>
-            <version>1.7.0</version>
+            <artifactId>resilience4j-spring-boot3</artifactId>
+            <version>2.1.0</version> <!-- or latest -->
         </dependency>
+        <dependency>
+            <groupId>io.vavr</groupId>
+            <artifactId>vavr</artifactId>
+            <version>0.10.4</version>
+        </dependency>
+
         <!-- Web -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- LoadBalancer -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-loadbalancer</artifactId>
         </dependency>
 
         <!-- JPA -->
@@ -65,5 +78,4 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
 </project>
