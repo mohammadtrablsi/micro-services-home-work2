@@ -6,7 +6,9 @@ com\example\userservice\dto\AuthResponse.class
 com\example\userservice\config\RestTemplateConfig.class
 com\example\userservice\repository\RoleRepository.class
 com\example\userservice\UserServiceApplication.class
+com\example\userservice\config\LoadBalancerConfiguration.class
 com\example\userservice\dto\AuthRequest.class
+com\example\userservice\security\HeaderAuthFilter.class
 com\example\userservice\controller\AuthController.class
 com\example\userservice\dto\RegisterRequest.class
 com\example\userservice\entity\User.class

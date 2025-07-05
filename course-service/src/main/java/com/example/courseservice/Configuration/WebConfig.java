@@ -26,7 +26,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 
 @Configuration
-@LoadBalancerClient(name = "course-service", configuration = LoadBalancerConfiguration.class)
+@LoadBalancerClient(name = "COURSE-SERVICE", configuration = LoadBalancerConfiguration.class)
 public class WebConfig {
 
     @LoadBalanced

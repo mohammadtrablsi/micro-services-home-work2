@@ -46,33 +46,75 @@ public class CourseController {
         return ResponseEntity.ok(courses);
     }
 
-    
-    @GetMapping("/trainer/by-name")
-    @CircuitBreaker(name = "userServiceCircuitBreaker", fallbackMethod = "getTrainerFallback")
-    @Retry(name = "userServiceRetry")
-    @TimeLimiter(name = "userServiceTimeout", fallbackMethod = "getTrainerFallback")
-    public ResponseEntity<?> getCoursesByTrainerName(
-            @RequestParam String name,
-            @RequestHeader("X-User-Role") String role
-    ) {
+@GetMapping("/trainer/byname")
+@CircuitBreaker(name = "userServiceCircuitBreaker", fallbackMethod = "getTrainerFallback")
+@Retry(name = "userServiceRetry")
+@TimeLimiter(name = "userServiceTimeout", fallbackMethod = "getTrainerFallback")
+public CompletableFuture<ResponseEntity<?>> getCoursesByTrainerName(
+        @RequestParam String name,
+        @RequestHeader("X-User-Role") String role) {
+
         if (!"ADMIN".equalsIgnoreCase(role)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Not authorized");
+            return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.FORBIDDEN).body("Not authorized"));
         }
 
-        // الاتصال بخدمة المستخدم لجلب ID المدرّب حسب الاسم
-        ResponseEntity<UserDTO> userRes = restTemplate.getForEntity(
-                "http://USER-SERVICE/users/name/" + name,
-                UserDTO.class
-        );
+        // Simulate async call to another service (RestTemplate call can be async)
+        return CompletableFuture.supplyAsync(() -> {
+            // Assume you have a method that gets the user from user-service
+            ResponseEntity<UserDTO> userRes = restTemplate.getForEntity(
+                    "http://USER-SERVICE/auth/users/name/" + name, 
+                    UserDTO.class
+            );
 
-        if (!userRes.getStatusCode().is2xxSuccessful() || userRes.getBody() == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Trainer not found");
-        }
+            if (!userRes.getStatusCode().is2xxSuccessful() || userRes.getBody() == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Trainer not found");
+            }
 
-        Long trainerId = userRes.getBody().getId();
-        List<Course> courses = repo.findByTrainerId(trainerId);
-        return ResponseEntity.ok(courses);
+            Long trainerId = userRes.getBody().getId();
+            List<Course> courses = repo.findByTrainerId(trainerId);
+            return ResponseEntity.ok(courses);
+        });
     }
+    
+//     @GetMapping("/trainer/by-name")
+//     @CircuitBreaker(name = "userServiceCircuitBreaker", fallbackMethod = "getTrainerFallback")
+//     @Retry(name = "userServiceRetry")
+//     @TimeLimiter(name = "userServiceTimeout", fallbackMethod = "getTrainerFallback")
+//     public ResponseEntity<?> getCoursesByTrainerName(
+//             @RequestParam String name,
+//             @RequestHeader("X-User-Role") String role
+//     ) {
+//         if (!"ADMIN".equalsIgnoreCase(role)) {
+//             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Not authorized");
+//         }
+
+//         // الاتصال بخدمة المستخدم لجلب ID المدرّب حسب الاسم
+//         ResponseEntity<UserDTO> userRes = restTemplate.getForEntity(
+//                 "http://USER-SERVICE/auth/users/name/" + name,
+//                 UserDTO.class
+//         );
+
+
+//   try {
+        
+//         if (!userRes.getStatusCode().is2xxSuccessful() || userRes.getBody() == null) {
+//             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Trainer not found");
+//         }
+
+//         Long trainerId = userRes.getBody().getId();
+//         List<Course> courses = repo.findByTrainerId(trainerId);
+//         return ResponseEntity.ok(courses);
+
+//     } catch (Exception e) {
+//         e.printStackTrace();
+//         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                 .body("Error communicating with User Service: " + e.getMessage());
+//     }
+
+
+
+
+//     }
 
     @PostMapping
     public ResponseEntity<?> createCourse(
@@ -290,10 +332,13 @@ public List<?> assessmentServiceFallback(Long userId, Long courseId, Throwable t
 }
 
 
-public ResponseEntity<?> getTrainerFallback(String name, String role, Throwable throwable) {
-    return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
-            .body("User service is not available now. Please try again later.");
+public CompletableFuture<ResponseEntity<?>> getTrainerFallback(String name, String role, Throwable throwable) {
+    return CompletableFuture.completedFuture(
+        ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+            .body("User service is not available now. Please try again later.")
+    );
 }
+
 public ResponseEntity<?> paymentServiceFallback(Long learnerId, Double price, Throwable throwable) {
     return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
             .body("Payment service is currently unavailable. Please try again later.");

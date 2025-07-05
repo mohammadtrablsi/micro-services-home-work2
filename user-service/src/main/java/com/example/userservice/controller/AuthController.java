@@ -10,6 +10,7 @@ import com.example.userservice.entity.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 // import java.util.List;
@@ -36,24 +37,59 @@ public class AuthController {
     @Autowired private AuthService authService;
     @Autowired private UserRepository userRepository;
 
-    @PostMapping("/register/learner")
-    public AuthResponse registerLearner(@RequestBody RegisterRequest req) {
-        return new AuthResponse(authService.registerLearner(req));
+   @PostMapping("/register/learner")
+public ResponseEntity<AuthResponse> registerLearner(@RequestBody RegisterRequest req) {
+    try {
+        String token = authService.registerLearner(req);
+        return ResponseEntity.ok(new AuthResponse(token));
+    } catch (IllegalArgumentException e) {
+        return ResponseEntity.badRequest().body(new AuthResponse("Error: " + e.getMessage()));
+    } catch (Exception e) {
+        return ResponseEntity.status(500).body(new AuthResponse("Unexpected error: " + e.getMessage()));
     }
-    @PostMapping("/register/trainer")
-    public AuthResponse registerTrainer(@RequestBody RegisterRequest req) {
-        return new AuthResponse(authService.addTrainer(req));
-    }
+}
 
-    @PostMapping("/register/admin")
-    public AuthResponse registerAdmin(@RequestBody RegisterRequest req) {
-        return new AuthResponse(authService.addAdmin(req));
+@PostMapping("/register/trainer")
+@PreAuthorize("hasRole('ADMIN')")
+public ResponseEntity<AuthResponse> registerTrainer(@RequestBody RegisterRequest req) {
+    try {
+        String token = authService.addTrainer(req);
+        return ResponseEntity.ok(new AuthResponse(token));
+    } catch (IllegalArgumentException e) {
+        return ResponseEntity.badRequest().body(new AuthResponse("Error: " + e.getMessage()));
+    } catch (Exception e) {
+        return ResponseEntity.status(500).body(new AuthResponse("Unexpected error: " + e.getMessage()));
     }
+}
 
-    @PostMapping("/login")
-    public AuthResponse login(@RequestBody LoginRequest req) {
-        return new AuthResponse(authService.login(req));
+
+
+@PostMapping("/register/admin")
+public ResponseEntity<AuthResponse> registerAdmin(@RequestBody RegisterRequest req) {
+    try {
+        String token = authService.addAdmin(req);
+        return ResponseEntity.ok(new AuthResponse(token));
+    } catch (IllegalArgumentException e) {
+        return ResponseEntity.badRequest().body(new AuthResponse("Error: " + e.getMessage()));
+    } catch (Exception e) {
+        return ResponseEntity.status(500).body(new AuthResponse("Unexpected error: " + e.getMessage()));
     }
+}
+
+
+@PostMapping("/login")
+public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest req) {
+    try {
+        String token = authService.login(req);
+        return ResponseEntity.ok(new AuthResponse(token));
+    } catch (IllegalArgumentException e) {
+        return ResponseEntity.badRequest().body(new AuthResponse("Error: " + e.getMessage()));
+    } catch (Exception e) {
+        return ResponseEntity.status(500).body(new AuthResponse("Unexpected error: " + e.getMessage()));
+    }
+}
+
+
     @GetMapping("/users/name/{username}")
     public ResponseEntity<UserDTO> getUserByUsername(@PathVariable String username) {
     User user = userRepository.findByUsername(username);

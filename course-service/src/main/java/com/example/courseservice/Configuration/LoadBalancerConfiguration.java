@@ -46,6 +46,6 @@ public class LoadBalancerConfiguration {
     @Bean
     public ReactorLoadBalancer<ServiceInstance> roundRobinLoadBalancer(
             ObjectProvider<ServiceInstanceListSupplier> serviceInstanceListSupplier) {
-        return new RoundRobinLoadBalancer(serviceInstanceListSupplier, "course-service");
+        return new RoundRobinLoadBalancer(serviceInstanceListSupplier, "COURSE-SERVICE");
     }
 }

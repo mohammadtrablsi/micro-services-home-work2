@@ -1,24 +1,58 @@
-resilience4j:
-  circuitbreaker:
-    instances:
-      courseServiceCB:
-        registerHealthIndicator: true
-        slidingWindowSize: 5
-        failureRateThreshold: 50
-        waitDurationInOpenState: 5s
-        permittedNumberOfCallsInHalfOpenState: 3
-        minimumNumberOfCalls: 5
+# # resilience4j:
+# #   circuitbreaker:
+# #     instances:
+# #       courseServiceCB:
+# #         registerHealthIndicator: true
+# #         slidingWindowSize: 5
+# #         failureRateThreshold: 50
+# #         waitDurationInOpenState: 5s
+# #         permittedNumberOfCallsInHalfOpenState: 3
+# #         minimumNumberOfCalls: 5
 
-  retry:
-    instances:
-      courseServiceRetry:
-        maxAttempts: 3
-        waitDuration: 1s
-        retryExceptions:
-          - java.net.ConnectException
-          - java.io.IOException
+# #   retry:
+# #     instances:
+# #       courseServiceRetry:
+# #         maxAttempts: 3
+# #         waitDuration: 1s
+# #         retryExceptions:
+# #           - java.net.ConnectException
+# #           - java.io.IOException
 
-  timelimiter:
-    instances:
-      courseServiceTimeout:
-        timeoutDuration: 3s
+# #   timelimiter:
+# #     instances:
+# #       courseServiceTimeout:
+# #         timeoutDuration: 3s
+# resilience4j:
+#   circuitbreaker:
+#     instances:
+#       assessmentServiceCB:
+#         registerHealthIndicator: true
+#         slidingWindowSize: 5
+#         failureRateThreshold: 50
+#         waitDurationInOpenState: 5s
+#         permittedNumberOfCallsInHalfOpenState: 3
+#         minimumNumberOfCalls: 5
+
+#   retry:
+#     instances:
+#       assessmentServiceRetry:
+#         maxAttempts: 3
+#         waitDuration: 1s
+#         retryExceptions:
+#           - java.net.ConnectException
+#           - java.io.IOException
+
+#   timelimiter:
+#     instances:
+#       assessmentServiceTimeout:
+#         timeoutDuration: 3s
+spring:
+  application:
+    name: ASSESSMENT-SERVICE
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/

@@ -7,6 +7,7 @@ C:\Users\felux\Downloads\MicroservicesExample_FullDB\user-service\src\main\java\
 C:\Users\felux\Downloads\MicroservicesExample_FullDB\user-service\src\main\java\com\example\userservice\UserServiceApplication.java
 C:\Users\felux\Downloads\MicroservicesExample_FullDB\user-service\src\main\java\com\example\userservice\dto\LoginRequest.java
 C:\Users\felux\Downloads\MicroservicesExample_FullDB\user-service\src\main\java\com\example\userservice\security\SecurityConfig.java
+C:\Users\felux\Downloads\MicroservicesExample_FullDB\user-service\src\main\java\com\example\userservice\security\HeaderAuthFilter.java
 C:\Users\felux\Downloads\MicroservicesExample_FullDB\user-service\src\main\java\com\example\userservice\seeder\RoleSeeder.java
 C:\Users\felux\Downloads\MicroservicesExample_FullDB\user-service\src\main\java\com\example\userservice\service\AuthService.java
 C:\Users\felux\Downloads\MicroservicesExample_FullDB\user-service\src\main\java\com\example\userservice\repository\UserRepository.java
@@ -14,4 +15,5 @@ C:\Users\felux\Downloads\MicroservicesExample_FullDB\user-service\src\main\java\
 C:\Users\felux\Downloads\MicroservicesExample_FullDB\user-service\src\main\java\com\example\userservice\controller\AuthController.java
 C:\Users\felux\Downloads\MicroservicesExample_FullDB\user-service\src\main\java\com\example\userservice\entity\User.java
 C:\Users\felux\Downloads\MicroservicesExample_FullDB\user-service\src\main\java\com\example\userservice\entity\Role.java
+C:\Users\felux\Downloads\MicroservicesExample_FullDB\user-service\src\main\java\com\example\userservice\config\LoadBalancerConfiguration.java
 C:\Users\felux\Downloads\MicroservicesExample_FullDB\user-service\src\main\java\com\example\userservice\dto\AuthRequest.java

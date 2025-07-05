@@ -15,10 +15,12 @@ public class ApiGatewayApplication {
     @Bean
     public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
         return builder.routes()
-            .route("userservice", r -> r.path("/users/**").uri("lb://user-service"))
-            .route("courseservice", r -> r.path("/courses/**").uri("lb://course-service"))
-            .route("paymentservice", r -> r.path("/payments/**").uri("lb://payment-service"))
-            .route("assessmentservice", r -> r.path("/assessments/**").uri("lb://assessment-service"))
+            .route("user-service", r -> r
+    .path("/users/**", "/auth/**")
+    .uri("lb://USER-SERVICE"))
+            .route("course-service", r -> r.path("/courses/**").uri("lb://COURSE-SERVICE"))
+            .route("payment-service", r -> r.path("/payments/**").uri("lb://payment-service"))
+            .route("assessment-service", r -> r.path("/tests/**").uri("lb://ASSESSMENT-SERVICE"))
             .build();
     }
 }

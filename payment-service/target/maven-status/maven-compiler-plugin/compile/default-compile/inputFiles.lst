@@ -1,7 +1,8 @@
+C:\Users\felux\Downloads\MicroservicesExample_FullDB\payment-service\src\main\java\com\example\paymentservice\services\PaymentService.java
 C:\Users\felux\Downloads\MicroservicesExample_FullDB\payment-service\src\main\java\com\example\paymentservice\Configuration\WebConfig.java
 C:\Users\felux\Downloads\MicroservicesExample_FullDB\payment-service\src\main\java\com\example\paymentservice\entity\PaymentTransaction.java
 C:\Users\felux\Downloads\MicroservicesExample_FullDB\payment-service\src\main\java\com\example\paymentservice\Configuration\CustomLoadBalancer.java
 C:\Users\felux\Downloads\MicroservicesExample_FullDB\payment-service\src\main\java\com\example\paymentservice\PaymentServiceApplication.java
-C:\Users\felux\Downloads\MicroservicesExample_FullDB\payment-service\src\main\java\com\example\paymentservice\services\PayementServices.java
+C:\Users\felux\Downloads\MicroservicesExample_FullDB\payment-service\src\main\java\com\example\paymentservice\Configuration\LoadBalancerConfiguration.java
 C:\Users\felux\Downloads\MicroservicesExample_FullDB\payment-service\src\main\java\com\example\paymentservice\controller\PaymentController.java
-C:\Users\felux\Downloads\MicroservicesExample_FullDB\payment-service\src\main\java\com\example\paymentservice\repository\ItemRepository.java
+C:\Users\felux\Downloads\MicroservicesExample_FullDB\payment-service\src\main\java\com\example\paymentservice\repository\PaymentTransactionRepository.java
