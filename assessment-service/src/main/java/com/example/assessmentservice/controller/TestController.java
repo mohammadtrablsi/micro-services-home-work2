@@ -44,7 +44,7 @@ public class TestController {
     }
     @CircuitBreaker(name = "courseServiceCB", fallbackMethod = "courseServiceFallback")
     @Retry(name = "courseServiceRetry")
-    @TimeLimiter(name = "courseServiceTimeout", fallbackMethod = "courseServiceFallback")
+    // @TimeLimiter(name = "courseServiceTimeout", fallbackMethod = "courseServiceFallback")
     @PostMapping("/addResult")
     public ResponseEntity<TestResult> addTestResult(@RequestBody TestResult result, @RequestHeader("X-User-Role") String role) {
         if (!"LEARNER".equalsIgnoreCase(role)) {

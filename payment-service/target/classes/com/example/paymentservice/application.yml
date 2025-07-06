@@ -1,3 +1,6 @@
+ # harmless on Windows; keeps hostname consistent
+
+
 spring:
   application:
     name: PAYMENT-SERVICE
@@ -12,4 +15,27 @@ eureka:
   instance:                # ← add this under the SAME "eureka:" block
     prefer-ip-address: true
     ip-address: 127.0.0.1   # or your LAN IP if you need other machines to reach it
-    # hostname: localhost     # harmless on Windows; keeps hostname consistent
+    # hostname: localhost    
+  # instance:
+  #   prefer-ip-address: true      # فعِّلها فقط إذا كنت تحتاج عنوان IP بدلاً من hostname
+
+# -------- Resilience4j --------
+resilience4j:
+  circuitbreaker:
+    instances:
+      userServiceCB:
+        slidingWindowSize: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
+        registerHealthIndicator: true
+
+  retry:
+    instances:
+      userServiceRetry:
+        maxAttempts: 3
+        waitDuration: 1s
+
+  timelimiter:
+    instances:
+      userServiceTimeout:
+        timeoutDuration: 4s

@@ -49,7 +49,7 @@ public class CourseController {
 @GetMapping("/trainer/byname")
 @CircuitBreaker(name = "userServiceCircuitBreaker", fallbackMethod = "getTrainerFallback")
 @Retry(name = "userServiceRetry")
-@TimeLimiter(name = "userServiceTimeout", fallbackMethod = "getTrainerFallback")
+// @TimeLimiter(name = "userServiceTimeout", fallbackMethod = "getTrainerFallback")
 public CompletableFuture<ResponseEntity<?>> getCoursesByTrainerName(
         @RequestParam String name,
         @RequestHeader("X-User-Role") String role) {
@@ -222,7 +222,7 @@ public ResponseEntity<?> subscribeToCourse(
     } catch (Exception ex) {
         // فشل الاتصال بخدمة الدفع
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
-                             .body("Payment service unavailable: " + ex.getMessage());
+                         .body("PAYMENT‑SERVICE غير متاح حالياً، لا يمكن التحقق من حالة الدفع.");
     }
 
     if (!paymentStatus) {
@@ -253,7 +253,7 @@ public ResponseEntity<?> subscribeToCourse(
     // تحقق من حالة الدفع عبر RestTemplate إلى خدمة الدفع
   @CircuitBreaker(name = "paymentServiceCB", fallbackMethod = "checkPaymentStatusFallback")
 @Retry(name = "paymentServiceRetry")
-@TimeLimiter(name = "paymentServiceTimeout", fallbackMethod = "checkPaymentStatusFallback")
+// @TimeLimiter(name = "paymentServiceTimeout", fallbackMethod = "checkPaymentStatusFallback")
 private CompletableFuture<Boolean> checkPaymentStatus(Long learnerId, Double coursePrice) {
     return CompletableFuture.supplyAsync(() -> {
         ResponseEntity<Boolean> paymentResponse = restTemplate.exchange(
@@ -266,15 +266,19 @@ private CompletableFuture<Boolean> checkPaymentStatus(Long learnerId, Double cou
     });
 }
 
-// Fallback for checkPaymentStatus
-private CompletableFuture<Boolean> checkPaymentStatusFallback(Long learnerId, Double coursePrice, Throwable t) {
-    return CompletableFuture.completedFuture(false); // return false when service fails
+public CompletableFuture<ResponseEntity<?>> checkPaymentStatusFallback(Long learnerId,
+                                                                       Double coursePrice,
+                                                                       Throwable t) {
+    return CompletableFuture.completedFuture(
+            ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+                    .body("PAYEMENT‑SERVICE غير متاح حالياً، لا يمكن التحقق من حالة الدفع.")
+    );
 }
 
 
    @CircuitBreaker(name = "paymentServiceCB", fallbackMethod = "processPaymentFallback")
 @Retry(name = "paymentServiceRetry")
-@TimeLimiter(name = "paymentServiceTimeout", fallbackMethod = "processPaymentFallback")
+// @TimeLimiter(name = "paymentServiceTimeout", fallbackMethod = "processPaymentFallback")
 private CompletableFuture<Void> processPayment(Long learnerId, Double coursePrice, Course course) {
     return CompletableFuture.runAsync(() -> {
         restTemplate.exchange(
@@ -286,9 +290,14 @@ private CompletableFuture<Void> processPayment(Long learnerId, Double coursePric
     });
 }
 
-// Fallback for processPayment
-private CompletableFuture<Void> processPaymentFallback(Long learnerId, Double coursePrice, Course course, Throwable t) {
-    return CompletableFuture.completedFuture(null); // silently continue or log error
+public CompletableFuture<ResponseEntity<?>> processPaymentFallback(Long learnerId,
+                                                                    Double coursePrice,
+                                                                    Course course,
+                                                                    Throwable ex) {
+    return CompletableFuture.completedFuture(
+            ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+                    .body("PAYEMENT‑SERVICE غير متاح حالياً، لم يتم تنفيذ عملية الدفع.")
+    );
 }
 
 
