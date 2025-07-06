@@ -13,23 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;   
-// import java.util.List;
 
-// @RestController
-// @RequestMapping("/users")
-// public class ItemController {
-//     private final ItemRepository repo;
-//     public ItemController(ItemRepository repo) { this.repo = repo; }
-
-//     @PostMapping
-//     public Item create(@RequestBody Item item) { return repo.save(item); }
-
-//     @GetMapping
-//     public List<Item> getAll() { return repo.findAll(); }
-
-//     @GetMapping("/<built-in function id>")
-//     public Item getOne(@PathVariable Long id) { return repo.findById(id).orElseThrow(); }
-// }
 @RestController
 @RequestMapping("/auth")
 public class AuthController {

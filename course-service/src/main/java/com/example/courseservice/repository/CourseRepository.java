@@ -6,15 +6,14 @@ import java.util.List;
 
 public interface CourseRepository extends JpaRepository<Course, Long> {
     
-    // جلب الدورات التي لم تتم الموافقة عليها بعد
+ 
     List<Course> findByApprovedFalse();
     
-    // جلب الدورات بناءً على Trainer ID
+   
     List<Course> findByTrainerId(Long trainerId);
 
-        // ✅ Add this:
-     // ✅ هذه هي الدالة المطلوبة
-    List<Course> findBySubscribedUserIdsContaining(Long userId); // Only works if you used @ElementCollection
+ 
+    List<Course> findBySubscribedUserIdsContaining(Long userId); 
     List<Course> findByApprovedTrue();
 
 }

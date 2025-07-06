@@ -76,45 +76,6 @@ public CompletableFuture<ResponseEntity<?>> getCoursesByTrainerName(
         });
     }
     
-//     @GetMapping("/trainer/by-name")
-//     @CircuitBreaker(name = "userServiceCircuitBreaker", fallbackMethod = "getTrainerFallback")
-//     @Retry(name = "userServiceRetry")
-//     @TimeLimiter(name = "userServiceTimeout", fallbackMethod = "getTrainerFallback")
-//     public ResponseEntity<?> getCoursesByTrainerName(
-//             @RequestParam String name,
-//             @RequestHeader("X-User-Role") String role
-//     ) {
-//         if (!"ADMIN".equalsIgnoreCase(role)) {
-//             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Not authorized");
-//         }
-
-//         // الاتصال بخدمة المستخدم لجلب ID المدرّب حسب الاسم
-//         ResponseEntity<UserDTO> userRes = restTemplate.getForEntity(
-//                 "http://USER-SERVICE/auth/users/name/" + name,
-//                 UserDTO.class
-//         );
-
-
-//   try {
-        
-//         if (!userRes.getStatusCode().is2xxSuccessful() || userRes.getBody() == null) {
-//             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Trainer not found");
-//         }
-
-//         Long trainerId = userRes.getBody().getId();
-//         List<Course> courses = repo.findByTrainerId(trainerId);
-//         return ResponseEntity.ok(courses);
-
-//     } catch (Exception e) {
-//         e.printStackTrace();
-//         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-//                 .body("Error communicating with User Service: " + e.getMessage());
-//     }
-
-
-
-
-//     }
 
     @PostMapping
     public ResponseEntity<?> createCourse(
@@ -144,66 +105,33 @@ public CompletableFuture<ResponseEntity<?>> getCoursesByTrainerName(
         return ResponseEntity.ok(pendingCourses);
     }
 
-        // API للموافقة على الدورة من قبل الـ admin
+       
     @PutMapping("/approve/{courseId}")
     public ResponseEntity<Course> approveCourse(
             @PathVariable Long courseId,
             @RequestHeader("X-User-Role") String role
     ) {
         if (!"ADMIN".equalsIgnoreCase(role)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);  // فقط المسؤول يمكنه الموافقة
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);  
         }
 
         Course course = repo.findById(courseId).orElse(null);
         if (course == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);  // الدورة غير موجودة
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);  
         }
 
-        course.setApproved(true);  // تعيين الدورة كموافقة
+        course.setApproved(true); 
         Course approvedCourse = repo.save(course);
         return ResponseEntity.ok(approvedCourse);
     }
-        // عرض جميع الدورات
+        
     @GetMapping
     public ResponseEntity<List<Course>> getAllCourses() {
         List<Course> courses = repo.findAll();
         return ResponseEntity.ok(courses);
     }
 
-// @PostMapping("/subscribe")
-// public ResponseEntity<?> subscribeToCourse(
-//     @RequestBody CourseSubscriptionRequest subscriptionRequest, 
-//     @RequestHeader("X-User-Id") Long learnerId
-// ) {
-//     // 1. تحقق من وجود الدورة
-//     Course course = repo.findById(subscriptionRequest.getCourseId()).orElse(null);
-//     if (course == null) {
-//         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Course not found");
-//     }
 
-//     try {
-//         // 2. التحقق من الدفع
-//         boolean paymentStatus = checkPaymentStatus(learnerId, course.getPrice()).join();
-//         if (!paymentStatus) {
-//             return ResponseEntity.status(HttpStatus.PAYMENT_REQUIRED).body("Payment required");
-//         }
-
-//         // 3. تنفيذ الدفع
-//         processPayment(learnerId, course.getPrice(), course).join();
-
-//         // ✅ 4. أضف المتعلم إلى قائمة المشتركين
-//         if (!course.getSubscribedUserIds().contains(learnerId)) {
-//             course.getSubscribedUserIds().add(learnerId);
-//             repo.save(course); // احفظ التحديث
-//         }
-
-//         return ResponseEntity.status(HttpStatus.CREATED).body("Successfully subscribed to course");
-
-//     } catch (Exception e) {
-//         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-//                 .body("Subscription failed due to internal error");
-//     }
-// }
 @PostMapping("/subscribe")
 public ResponseEntity<?> subscribeToCourse(
         @RequestBody CourseSubscriptionRequest subscriptionRequest,
@@ -300,40 +228,6 @@ public CompletableFuture<ResponseEntity<?>> processPaymentFallback(Long learnerI
     );
 }
 
-
-//    // In CourseService (or any downstream service)
-//    @GetMapping("/courses")
-//    public ResponseEntity<?> getSubscribedCoursesAndTestResults(
-//         @RequestHeader("X-User-Id") Long userId,  
-//         @RequestHeader("X-User-Role") String role) {
-
-//     if (!"LEARNER".equalsIgnoreCase(role)) {
-//         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Only learners can access their courses and results");
-//     }
-
-//     // Fetch the courses the user is subscribed to
-//     List<Course> courses = courseRepository.findBySubscribedUsersId(userId); // Use userId to fetch courses
-
-//     if (courses.isEmpty()) {
-//         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No courses found for this user");
-//     }
-
-//     List<Map<String, Object>> coursesWithResults = new ArrayList<>();
-
-//     // Fetch the test results for each course
-//     for (Course course : courses) {
-//         Map<String, Object> courseWithResults = new HashMap<>();
-//         courseWithResults.put("course", course);
-        
-//         // Fetch the test results for the user in this course
-//         List<TestResult> results = testResultRepository.findByUserIdAndTestCourseId(userId, course.getId());
-//         courseWithResults.put("results", results);
-        
-//         coursesWithResults.add(courseWithResults);
-//     }
-
-//     return ResponseEntity.ok(coursesWithResults);
-// }
 @GetMapping("/my-courses-with-results")
 public ResponseEntity<?> getSubscribedCoursesAndTestResults(
         @RequestHeader("X-User-Id") Long userId,

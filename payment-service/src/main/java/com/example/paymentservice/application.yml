@@ -12,12 +12,12 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka
-  instance:                # ← add this under the SAME "eureka:" block
+  instance:                
     prefer-ip-address: true
-    ip-address: 127.0.0.1   # or your LAN IP if you need other machines to reach it
+    ip-address: 127.0.0.1   
     # hostname: localhost    
   # instance:
-  #   prefer-ip-address: true      # فعِّلها فقط إذا كنت تحتاج عنوان IP بدلاً من hostname
+  #   prefer-ip-address: true      
 
 # -------- Resilience4j --------
 resilience4j:

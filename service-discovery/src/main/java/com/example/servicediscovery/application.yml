@@ -1,13 +1,13 @@
 spring:
   application:
-    name: discovery-server       # or whatever you call your registry
+    name: discovery-server      
 
 server:
-  port: 8761                     # the port where Eureka UI runs
+  port: 8761                     
 
 eureka:
   client:
-    register-with-eureka: false  # ⬅  do not register the server with itself
-    fetch-registry: false        # ⬅  do not try to fetch the registry
+    register-with-eureka: false  
+    fetch-registry: false      
     service-url:
       defaultZone: http://localhost:8761/eureka
