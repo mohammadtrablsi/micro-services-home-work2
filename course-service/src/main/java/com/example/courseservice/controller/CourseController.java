@@ -170,40 +170,85 @@ public CompletableFuture<ResponseEntity<?>> getCoursesByTrainerName(
         return ResponseEntity.ok(courses);
     }
 
+// @PostMapping("/subscribe")
+// public ResponseEntity<?> subscribeToCourse(
+//     @RequestBody CourseSubscriptionRequest subscriptionRequest, 
+//     @RequestHeader("X-User-Id") Long learnerId
+// ) {
+//     // 1. تحقق من وجود الدورة
+//     Course course = repo.findById(subscriptionRequest.getCourseId()).orElse(null);
+//     if (course == null) {
+//         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Course not found");
+//     }
+
+//     try {
+//         // 2. التحقق من الدفع
+//         boolean paymentStatus = checkPaymentStatus(learnerId, course.getPrice()).join();
+//         if (!paymentStatus) {
+//             return ResponseEntity.status(HttpStatus.PAYMENT_REQUIRED).body("Payment required");
+//         }
+
+//         // 3. تنفيذ الدفع
+//         processPayment(learnerId, course.getPrice(), course).join();
+
+//         // ✅ 4. أضف المتعلم إلى قائمة المشتركين
+//         if (!course.getSubscribedUserIds().contains(learnerId)) {
+//             course.getSubscribedUserIds().add(learnerId);
+//             repo.save(course); // احفظ التحديث
+//         }
+
+//         return ResponseEntity.status(HttpStatus.CREATED).body("Successfully subscribed to course");
+
+//     } catch (Exception e) {
+//         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                 .body("Subscription failed due to internal error");
+//     }
+// }
 @PostMapping("/subscribe")
 public ResponseEntity<?> subscribeToCourse(
-    @RequestBody CourseSubscriptionRequest subscriptionRequest, 
-    @RequestHeader("X-User-Id") Long learnerId
-) {
-    // 1. تحقق من وجود الدورة
+        @RequestBody CourseSubscriptionRequest subscriptionRequest,
+        @RequestHeader("X-User-Id") Long learnerId) {
+
+    /* 1) التحقق من وجود الدورة */
     Course course = repo.findById(subscriptionRequest.getCourseId()).orElse(null);
     if (course == null) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Course not found");
     }
 
+    /* 2) التحقق من الدفع لدى payment‑service */
+    boolean paymentStatus;
     try {
-        // 2. التحقق من الدفع
-        boolean paymentStatus = checkPaymentStatus(learnerId, course.getPrice()).join();
-        if (!paymentStatus) {
-            return ResponseEntity.status(HttpStatus.PAYMENT_REQUIRED).body("Payment required");
-        }
-
-        // 3. تنفيذ الدفع
-        processPayment(learnerId, course.getPrice(), course).join();
-
-        // ✅ 4. أضف المتعلم إلى قائمة المشتركين
-        if (!course.getSubscribedUserIds().contains(learnerId)) {
-            course.getSubscribedUserIds().add(learnerId);
-            repo.save(course); // احفظ التحديث
-        }
-
-        return ResponseEntity.status(HttpStatus.CREATED).body("Successfully subscribed to course");
-
-    } catch (Exception e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("Subscription failed due to internal error");
+        paymentStatus = checkPaymentStatus(learnerId, course.getPrice()).join();
+    } catch (Exception ex) {
+        // فشل الاتصال بخدمة الدفع
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+                             .body("Payment service unavailable: " + ex.getMessage());
     }
+
+    if (!paymentStatus) {
+        // لم يدفع المستخدم أو الرصيد غير كافٍ
+        return ResponseEntity.status(HttpStatus.PAYMENT_REQUIRED)
+                             .body("Payment required");
+    }
+
+    /* 3) تنفيذ الدفع فعليًا (يخصم الرصيد ويسجل العملية) */
+    try {
+        processPayment(learnerId, course.getPrice(), course).join();
+    } catch (Exception ex) {
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+                             .body("Payment processing failed: " + ex.getMessage());
+    }
+
+    /* 4) إضافة المتعلّم إلى قائمة المشتركين إن لم يكن موجودًا بالفعل */
+    if (!course.getSubscribedUserIds().contains(learnerId)) {
+        course.getSubscribedUserIds().add(learnerId);
+        repo.save(course);
+    }
+
+    return ResponseEntity.status(HttpStatus.CREATED)
+                         .body("Successfully subscribed to course");
 }
+
 
     // تحقق من حالة الدفع عبر RestTemplate إلى خدمة الدفع
   @CircuitBreaker(name = "paymentServiceCB", fallbackMethod = "checkPaymentStatusFallback")
@@ -212,7 +257,7 @@ public ResponseEntity<?> subscribeToCourse(
 private CompletableFuture<Boolean> checkPaymentStatus(Long learnerId, Double coursePrice) {
     return CompletableFuture.supplyAsync(() -> {
         ResponseEntity<Boolean> paymentResponse = restTemplate.exchange(
-            "http://payment-service/payment/check/" + learnerId + "/" + coursePrice,
+            "http://PAYMENT-SERVICE/payment/check/" + learnerId + "/" + coursePrice,
             HttpMethod.GET,
             null,
             Boolean.class
@@ -233,7 +278,7 @@ private CompletableFuture<Boolean> checkPaymentStatusFallback(Long learnerId, Do
 private CompletableFuture<Void> processPayment(Long learnerId, Double coursePrice, Course course) {
     return CompletableFuture.runAsync(() -> {
         restTemplate.exchange(
-            "http://payment-service/payment/process/" + learnerId + "/" + coursePrice + "/" + course.getId(),
+            "http://PAYMENT-SERVICE/payment/process/" + learnerId + "/" + coursePrice + "/" + course.getId(),
             HttpMethod.POST,
             null,
             Void.class
@@ -312,6 +357,27 @@ public ResponseEntity<?> getSubscribedCoursesAndTestResults(
 
     return ResponseEntity.ok(coursesWithResults);
 }
+@GetMapping("/available")
+public ResponseEntity<?> getAvailableCoursesForLearner(
+        @RequestHeader("X-User-Id") Long learnerId,
+        @RequestHeader("X-User-Role") String role
+) {
+    if (!"LEARNER".equalsIgnoreCase(role)) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Only learners can access this endpoint");
+    }
+
+    List<Course> allApprovedCourses = repo.findByApprovedTrue();
+    List<Course> availableCourses = new ArrayList<>();
+
+    for (Course course : allApprovedCourses) {
+        if (!course.getSubscribedUserIds().contains(learnerId)) {
+            availableCourses.add(course);
+        }
+    }
+
+    return ResponseEntity.ok(availableCourses);
+}
+
 @GetMapping("/{courseId}")
 public ResponseEntity<Boolean> checkCourseExists(@PathVariable Long courseId) {
     boolean exists = repo.existsById(courseId);

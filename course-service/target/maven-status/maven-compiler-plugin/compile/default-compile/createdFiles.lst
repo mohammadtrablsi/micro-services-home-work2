@@ -1,6 +1,4 @@
-com\example\courseservice\Configuration\LoadBalancerConfiguration.class
 com\example\courseservice\Configuration\WebConfig.class
-com\example\courseservice\controller\CourseController.class
 com\example\courseservice\dto\UserDTO.class
 com\example\courseservice\repository\CourseRepository.class
 com\example\courseservice\Configuration\CustomLoadBalancer.class

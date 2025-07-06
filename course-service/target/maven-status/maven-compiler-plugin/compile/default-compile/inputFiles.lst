@@ -1,10 +1,10 @@
-C:\Users\felux\Downloads\MicroservicesExample_FullDB\course-service\src\main\java\com\example\courseservice\Configuration\LoadBalancerConfiguration.java
-C:\Users\felux\Downloads\MicroservicesExample_FullDB\course-service\src\main\java\com\example\courseservice\CourseServiceApplication.java
-C:\Users\felux\Downloads\MicroservicesExample_FullDB\course-service\src\main\java\com\example\courseservice\dto\CourseSubscriptionRequest.java
-C:\Users\felux\Downloads\MicroservicesExample_FullDB\course-service\src\main\java\com\example\courseservice\dto\UserDTO.java
-C:\Users\felux\Downloads\MicroservicesExample_FullDB\course-service\src\main\java\com\example\courseservice\dto\CourseDTO.java
-C:\Users\felux\Downloads\MicroservicesExample_FullDB\course-service\src\main\java\com\example\courseservice\Configuration\CustomLoadBalancer.java
-C:\Users\felux\Downloads\MicroservicesExample_FullDB\course-service\src\main\java\com\example\courseservice\controller\CourseController.java
-C:\Users\felux\Downloads\MicroservicesExample_FullDB\course-service\src\main\java\com\example\courseservice\entity\Course.java
-C:\Users\felux\Downloads\MicroservicesExample_FullDB\course-service\src\main\java\com\example\courseservice\repository\CourseRepository.java
-C:\Users\felux\Downloads\MicroservicesExample_FullDB\course-service\src\main\java\com\example\courseservice\Configuration\WebConfig.java
+D:\previous downloads\MicroservicesExample_FullDB\course-service\src\main\java\com\example\courseservice\Configuration\WebConfig.java
+D:\previous downloads\MicroservicesExample_FullDB\course-service\src\main\java\com\example\courseservice\dto\CourseDTO.java
+D:\previous downloads\MicroservicesExample_FullDB\course-service\src\main\java\com\example\courseservice\dto\CourseSubscriptionRequest.java
+D:\previous downloads\MicroservicesExample_FullDB\course-service\src\main\java\com\example\courseservice\Configuration\LoadBalancerConfiguration.java
+D:\previous downloads\MicroservicesExample_FullDB\course-service\src\main\java\com\example\courseservice\entity\Course.java
+D:\previous downloads\MicroservicesExample_FullDB\course-service\src\main\java\com\example\courseservice\controller\CourseController.java
+D:\previous downloads\MicroservicesExample_FullDB\course-service\src\main\java\com\example\courseservice\dto\UserDTO.java
+D:\previous downloads\MicroservicesExample_FullDB\course-service\src\main\java\com\example\courseservice\repository\CourseRepository.java
+D:\previous downloads\MicroservicesExample_FullDB\course-service\src\main\java\com\example\courseservice\CourseServiceApplication.java
+D:\previous downloads\MicroservicesExample_FullDB\course-service\src\main\java\com\example\courseservice\Configuration\CustomLoadBalancer.java

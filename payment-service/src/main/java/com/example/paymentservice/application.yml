@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: PAYMENT-SERVICE
+
+server:
+  port: 8083
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:                # ← add this under the SAME "eureka:" block
+    prefer-ip-address: true
+    ip-address: 127.0.0.1   # or your LAN IP if you need other machines to reach it
+    # hostname: localhost     # harmless on Windows; keeps hostname consistent

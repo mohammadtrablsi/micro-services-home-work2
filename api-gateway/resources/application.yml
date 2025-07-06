@@ -84,11 +84,10 @@ routes:
   - id: payment-service
     uri: lb://PAYMENT-SERVICE
     predicates:
-      - Path=/payments/**
+      - Path=/payment/**
     filters:
+      # - StripPrefix=1               # removes "/payment" before forwarding
       - CircuitBreaker=name=paymentServiceCB,fallbackUri=/fallback/payment
-      - Retry=name=paymentServiceRetry,maxAttempts=3,waitDuration=1000ms
-      - RequestTimeout=timeout=5000ms
 
   - id: assessment-service
     uri: lb://ASSESSMENT-SERVICE

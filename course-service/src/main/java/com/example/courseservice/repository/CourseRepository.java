@@ -15,5 +15,6 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
         // ✅ Add this:
      // ✅ هذه هي الدالة المطلوبة
     List<Course> findBySubscribedUserIdsContaining(Long userId); // Only works if you used @ElementCollection
+    List<Course> findByApprovedTrue();
 
 }

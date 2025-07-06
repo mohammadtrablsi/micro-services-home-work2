@@ -123,6 +123,8 @@ public class SecurityConfig {
 
             // trainer registration still restricted to admins
             .requestMatchers("/auth/register/trainer").hasRole("ADMIN")
+            // .requestMatchers("/users/*/balance", "/users/*/deduct").permitAll()
+            .requestMatchers("/auth/users/*/deduct", "/auth/users/*/balance").permitAll()
 
             // ✅ FIXED: use the full path prefix
             .requestMatchers("/auth/users/name/**").hasRole("ADMIN")

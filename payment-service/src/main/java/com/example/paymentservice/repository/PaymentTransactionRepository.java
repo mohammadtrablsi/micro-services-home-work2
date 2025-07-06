@@ -4,4 +4,5 @@ import com.example.paymentservice.entity.PaymentTransaction;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PaymentTransactionRepository extends JpaRepository<PaymentTransaction, Long> {
+    boolean existsByLearnerIdAndCourseId(Long learnerId, Long courseId);
 }

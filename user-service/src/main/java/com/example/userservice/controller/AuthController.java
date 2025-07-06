@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.http.HttpStatus;   
 // import java.util.List;
 
 // @RestController
@@ -105,5 +105,40 @@ public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest req) {
     );
     return ResponseEntity.ok(dto);
 }
+
+@GetMapping("/users/{id}/balance")
+public ResponseEntity<Double> getUserBalance(@PathVariable Long id) {
+    User user = userRepository.findById(id).orElse(null);
+    if (user == null) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+    }
+    return ResponseEntity.ok(user.getWalletBalance());
+}
+
+
+
+    @PostMapping("/users/{id}/deduct")
+    public ResponseEntity<?> deductBalance(
+            @PathVariable Long id,
+            @RequestParam Double amount) {
+
+        if (amount == null || amount <= 0) {
+            return ResponseEntity.badRequest().body("Amount must be positive");
+        }
+
+        User user = userRepository.findById(id).orElse(null);
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        if (user.getWalletBalance() < amount) {
+            return ResponseEntity.status(402).body("Insufficient funds");
+        }
+
+        user.setWalletBalance(user.getWalletBalance() - amount);
+        userRepository.save(user);
+
+        return ResponseEntity.ok("Balance updated");
+    }
 
 }

@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
 @Configuration
-@LoadBalancerClient(name = "USER-SERVICE", configuration = LoadBalancerConfiguration.class)
+// @LoadBalancerClient(name = "USER-SERVICE", configuration = LoadBalancerConfiguration.class)
 public class RestTemplateConfig {
     @LoadBalanced 
     @Bean

@@ -19,7 +19,7 @@ public class ApiGatewayApplication {
     .path("/users/**", "/auth/**")
     .uri("lb://USER-SERVICE"))
             .route("course-service", r -> r.path("/courses/**").uri("lb://COURSE-SERVICE"))
-            .route("payment-service", r -> r.path("/payments/**").uri("lb://payment-service"))
+            .route("payment-service", r -> r.path("/payment/**").uri("lb://PAYMENT-SERVICE"))
             .route("assessment-service", r -> r.path("/tests/**").uri("lb://ASSESSMENT-SERVICE"))
             .build();
     }
