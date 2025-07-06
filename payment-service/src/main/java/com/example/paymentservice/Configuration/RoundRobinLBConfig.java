@@ -30,7 +30,7 @@
 // // //         return new RoundRobinLoadBalancer(provider, "course-service");
 // // //     }
 // // // }
-// // package com.example.userservice.config;
+// // package com.example.paymentservice.Configuration;
 
 // // import org.springframework.beans.factory.ObjectProvider;
 // // import org.springframework.cloud.client.ServiceInstance;
@@ -46,10 +46,10 @@
 // //     @Bean
 // //     public ReactorLoadBalancer<ServiceInstance> roundRobinLoadBalancer(
 // //             ObjectProvider<ServiceInstanceListSupplier> serviceInstanceListSupplier) {
-// //         return new RoundRobinLoadBalancer(serviceInstanceListSupplier, "USER-SERVICE");
+// //         return new RoundRobinLoadBalancer(serviceInstanceListSupplier, "PAYMENT-SERVICE");
 // //     }
 // // }
-// package com.example.userservice.config;
+// package com.example.paymentservice.Configuration;
 
 // import org.springframework.beans.factory.ObjectProvider;
 // import org.springframework.cloud.client.ServiceInstance;
@@ -60,12 +60,16 @@
 // import org.springframework.context.annotation.Configuration;
 
 // @Configuration
-// public class LoadBalancerConfiguration {
+// public class RoundRobinLBConfig {
 
-//     // Round-robin load balancing for USER-SERVICE
+//     /**
+//      *  Replace “PAYMENT-SERVICE” with the logical service‑ID *you call most*.
+//      *  It still works if the name differs from this app’s own `spring.application.name`.
+//      */
 //     @Bean
 //     public ReactorLoadBalancer<ServiceInstance> roundRobinLoadBalancer(
-//             ObjectProvider<ServiceInstanceListSupplier> serviceInstanceListSupplier) {
-//         return new RoundRobinLoadBalancer(serviceInstanceListSupplier, "USER-SERVICE");
+//             ObjectProvider<ServiceInstanceListSupplier> suppliers) {
+
+//         return new RoundRobinLoadBalancer(suppliers, "PAYMENT-SERVICE");
 //     }
 // }
